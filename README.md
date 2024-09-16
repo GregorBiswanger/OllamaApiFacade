@@ -2,6 +2,8 @@
 
 **OllamaApiFacade** is an open-source library that allows you to run your own .NET backend as an Ollama API, based on the **Microsoft Semantic Kernel**. This lets clients expecting an Ollama backend interact with your .NET backend. For example, you can use **[Open WebUI](https://openwebui.com)** with your own backend. The library also supports local LLM/SLM services like **LmStudio** and is easily extendable to add more interfaces.
 
+![OllamaApiFacade Demo](./OllamaApiFacade/Assets/demo.gif)
+
 ## Features ✨
 
 - **Seamless Ollama Backend Integration**: OllamaApiFacade allows you to expose your .NET backend as a local Ollama API, making it compatible with Open WebUI solutions.
