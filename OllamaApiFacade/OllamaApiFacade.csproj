@@ -6,6 +6,22 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <PackageId>OllamaApiFacade</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>Gregor Biswanger</Authors>
+    <Description>OllamaApiFacade is an open-source library for running a .NET backend as an Ollama API using Microsoft Semantic Kernel. It supports local language models services like LmStudio and allows seamless message conversion and streaming between Semantic Kernel and Ollama clients like Open WebUI.</Description>
+    <PackageTags>Semantic Kernel, Ollama, AI, API, LLM, SLM</PackageTags>
+    <PackageIcon>Assets/PackageIcon.png</PackageIcon>
+    <None Update="Assets/PackageIcon.png">
+      <Pack>True</Pack>
+      <PackagePath>Assets/</PackagePath>
+    </None>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/GregorBiswanger/OllamaApiFacade</RepositoryUrl>
+    <IsPackable>true</IsPackable>
+  </PropertyGroup>
+
   <ItemGroup>
     <Folder Include="DTOs\" />
   </ItemGroup>
