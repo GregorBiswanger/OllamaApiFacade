@@ -1,0 +1,32 @@
+name: Publish NuGet Package
+
+on:
+  push:
+    tags:
+      - 'v*.*.*' # Release only on version tags (e.g., v1.0.0)
+
+jobs:
+  nuget:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v2
+      
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '8.x'
+      
+      - name: Restore dependencies
+        run: dotnet restore
+      
+      - name: Build the project
+        run: dotnet build --configuration Release --no-restore
+      
+      - name: Pack the project
+        run: dotnet pack --configuration Release --no-restore --output ./package
+
+      - name: Push NuGet package
+        run: dotnet nuget push ./package/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
