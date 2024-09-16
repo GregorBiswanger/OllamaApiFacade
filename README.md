@@ -11,7 +11,7 @@
 
 ## Installation 📦
 
-You can install the **OllamaApiFacade** via [NuGet](https://www.nuget.org/packages/OllamaApiFacade/):
+You can install the **OllamaApiFacade** via [![NuGet](https://img.shields.io/nuget/v/OllamaApiFacade?style=flat-square)](https://www.nuget.org/packages/OllamaApiFacade/)
 
 ```bash
 dotnet add package OllamaApiFacade
