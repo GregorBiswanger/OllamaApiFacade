@@ -18,13 +18,13 @@ jobs:
           dotnet-version: '8.x'
       
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore OllamaApiFacade/OllamaApiFacade.csproj
       
       - name: Build the project
-        run: dotnet build --configuration Release --no-restore
+        run: dotnet build OllamaApiFacade/OllamaApiFacade.csproj --configuration Release --no-restore
       
       - name: Pack the project
-        run: dotnet pack --configuration Release --no-restore --output ./package
+        run: dotnet pack OllamaApiFacade/OllamaApiFacade.csproj --configuration Release --no-restore --output ./package
 
       - name: Push NuGet package
         run: dotnet nuget push ./package/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
