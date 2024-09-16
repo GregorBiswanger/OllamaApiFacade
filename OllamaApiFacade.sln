@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35303.130
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OllamaApiFacade", "OllamaApiFacade\OllamaApiFacade.csproj", "{30F40269-F73B-4C2B-893F-C587B11C9ED7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OllamaApiFacade.DemoWebApi", "OllamaApiFacade.DemoWebApi\OllamaApiFacade.DemoWebApi.csproj", "{150F82FB-8C6C-4378-A886-B4A6BB323318}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{30F40269-F73B-4C2B-893F-C587B11C9ED7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30F40269-F73B-4C2B-893F-C587B11C9ED7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30F40269-F73B-4C2B-893F-C587B11C9ED7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30F40269-F73B-4C2B-893F-C587B11C9ED7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{150F82FB-8C6C-4378-A886-B4A6BB323318}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{150F82FB-8C6C-4378-A886-B4A6BB323318}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{150F82FB-8C6C-4378-A886-B4A6BB323318}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{150F82FB-8C6C-4378-A886-B4A6BB323318}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {86A7463D-BDF8-46A3-96AA-1DC6D3EFB363}
+	EndGlobalSection
+EndGlobal
