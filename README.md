@@ -155,7 +155,6 @@ In this API, responses are typically expected to be streamed back to the client.
 
 This method simplifies the process of returning streamed responses, making the interaction between the client and backend smooth and efficient.
 
-
 ## Contributions 🤝
 
 We encourage the community to contribute to this project! If there are additional features, interfaces, or improvements you would like to see, feel free to submit a pull request. Contributions of any kind are highly appreciated.
