@@ -15,7 +15,7 @@ public static class KernelBuilderExtensions
     /// <remarks>
     /// This method sets up a connection to the specified LM Studio endpoint and configures the kernel builder to use OpenAI chat completion with the provided model.
     /// </remarks>
-    public static IKernelBuilder AddLmStudio(this IKernelBuilder builder, string model = "none", string endpoint = "http://localhost:1234")
+    public static IKernelBuilder AddLmStudio(this IKernelBuilder builder, string model = "none", string endpoint = "http://localhost:1234/v1/")
     {
         var uri = new Uri(endpoint);
         var openAiClientOptions = new OpenAIClientOptions { Endpoint = uri };
