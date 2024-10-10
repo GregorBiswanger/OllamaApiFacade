@@ -1,4 +1,5 @@
-﻿using Microsoft.SemanticKernel;
+﻿using System.ClientModel;
+using Microsoft.SemanticKernel;
 using OpenAI;
 
 namespace OllamaApiFacade.Extensions;
@@ -19,7 +20,8 @@ public static class KernelBuilderExtensions
     {
         var uri = new Uri(endpoint);
         var openAiClientOptions = new OpenAIClientOptions { Endpoint = uri };
-        var openAiClient = new OpenAIClient("none", openAiClientOptions);
+        var apiKeyCredential = new ApiKeyCredential("none");
+        var openAiClient = new OpenAIClient(apiKeyCredential, openAiClientOptions);
 
         builder.AddOpenAIChatCompletion(model, openAiClient);
 

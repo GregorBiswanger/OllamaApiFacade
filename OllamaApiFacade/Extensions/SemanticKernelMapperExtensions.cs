@@ -2,6 +2,7 @@
 using Microsoft.SemanticKernel.ChatCompletion;
 using OllamaApiFacade.DTOs;
 using OpenAI.Chat;
+using ChatMessageContent = Microsoft.SemanticKernel.ChatMessageContent;
 
 namespace OllamaApiFacade.Extensions;
 
@@ -65,7 +66,7 @@ public static class SemanticKernelMapperExtensions
     }
 
     /// <summary>
-    /// Converts a <see cref="ChatMessageContent"/> object into a <see cref="OllamaApiFacade.DTOs.ChatResponse"/> object.
+    /// Converts a <see cref="Microsoft.SemanticKernel.ChatMessageContent"/> object into a <see cref="OllamaApiFacade.DTOs.ChatResponse"/> object.
     /// </summary>
     /// <param name="message">The chat message content to be converted.</param>
     /// <returns>A <see cref="OllamaApiFacade.DTOs.ChatResponse"/> object containing the converted message content.</returns>
@@ -117,9 +118,9 @@ public static class SemanticKernelMapperExtensions
             ],
             Usage: new Usage
             {
-                PromptTokens = chatTokenUsage!.InputTokens,
-                CompletionTokens = chatTokenUsage.OutputTokens,
-                TotalTokens = chatTokenUsage.TotalTokens
+                PromptTokens = chatTokenUsage!.InputTokenCount,
+                CompletionTokens = chatTokenUsage.OutputTokenCount,
+                TotalTokens = chatTokenUsage.TotalTokenCount
             }
         );
     }
