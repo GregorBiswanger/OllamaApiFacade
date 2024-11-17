@@ -77,8 +77,7 @@ public static class SemanticKernelMapperExtensions
 
     private static ChatResponse ToChatResponseInternal(string? modelId, AuthorRole? role, string? content, IReadOnlyDictionary<string, object?>? metadata)
     {
-        var createdAtDateTimeOffset = (DateTimeOffset)metadata!["CreatedAt"]!;
-        var createdAt = createdAtDateTimeOffset.ToUniversalTime().ToString("o");
+        var createdAt = GetCreatedAt(metadata);
 
         return new ChatResponse(
             modelId,
@@ -88,6 +87,16 @@ public static class SemanticKernelMapperExtensions
         );
     }
 
+    private static string GetCreatedAt(IReadOnlyDictionary<string, object?>? metadata)
+    {
+        if (metadata != null && metadata.TryGetValue("CreatedAt", out var createdAtValue) && createdAtValue is DateTimeOffset createdAtDateTimeOffset)
+        {
+            return createdAtDateTimeOffset.ToUniversalTime().ToString("o");
+        }
+
+        return DateTimeOffset.MinValue.ToUniversalTime().ToString("o");
+    }
+
     /// <summary>
     /// Converts a <see cref="ChatMessageContent"/> object into a <see cref="OllamaApiFacade.DTOs.CompletionResponse"/> object.
     /// </summary>
@@ -95,8 +104,8 @@ public static class SemanticKernelMapperExtensions
     /// <returns>A <see cref="OllamaApiFacade.DTOs.CompletionResponse"/> object containing the converted message content.</returns>
     public static CompletionResponse ToCompletionResponse(this ChatMessageContent chatMessageContent)
     {
-        var chatTokenUsage = chatMessageContent.Metadata!["Usage"] as ChatTokenUsage;
-        var systemFingerprint = chatMessageContent.Metadata["SystemFingerprint"] == null;
+        var chatTokenUsage = chatMessageContent.Metadata?["Usage"] as ChatTokenUsage;
+        var systemFingerprint = chatMessageContent.Metadata?["SystemFingerprint"] == null;
 
         return new CompletionResponse(
             Id: "chatcmpl-427",
@@ -116,12 +125,12 @@ public static class SemanticKernelMapperExtensions
                     FinishReason: "stop"
                 )
             ],
-            Usage: new Usage
+            Usage: chatTokenUsage != null ? new Usage
             {
-                PromptTokens = chatTokenUsage!.InputTokenCount,
+                PromptTokens = chatTokenUsage.InputTokenCount,
                 CompletionTokens = chatTokenUsage.OutputTokenCount,
                 TotalTokens = chatTokenUsage.TotalTokenCount
-            }
+            } : new Usage()
         );
     }
 }
