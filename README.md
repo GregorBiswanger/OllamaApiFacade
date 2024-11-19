@@ -157,6 +157,28 @@ In this API, responses are typically expected to be streamed back to the client.
 
 This method simplifies the process of returning streamed responses, making the interaction between the client and backend smooth and efficient.
 
+### Debugging HTTP Communication with `AddProxyForDebug` 🐞
+
+To inspect what data is being sent and received via HTTP to the language model APIs, you can use the `AddProxyForDebug` method. This is particularly useful for debugging with tools like **Burp Suite Community Edition** or **OWASP ZAP**.
+
+#### How to Use
+1. Add `AddProxyForDebug` to your service configuration:
+   ```csharp
+   builder.Services.AddProxyForDebug();
+   ```
+2. Start a local debugging tool such as Burp Suite Community Edition.
+
+By default, the proxy listens on port `8080`. If **Open WebUI** or another service is already running on this port, update the port in Burp Suite or your chosen proxy tool and pass the new proxy URL to `AddProxyForDebug`:
+   ```csharp
+   builder.Services.AddProxyForDebug("http://127.0.0.1:8888");
+   ```
+
+#### Important Notes
+- Make sure the proxy and your backend are not conflicting on the same port.
+- This method is intended for development and debugging only. Avoid using it in production as it bypasses SSL validation.
+
+Using this setup, you can see all HTTP requests and responses exchanged with the language model APIs, making it easier to debug and analyze the communication.
+
 ## Contributions 🤝
 
 We encourage the community to contribute to this project! If there are additional features, interfaces, or improvements you would like to see, feel free to submit a pull request. Contributions of any kind are highly appreciated.
