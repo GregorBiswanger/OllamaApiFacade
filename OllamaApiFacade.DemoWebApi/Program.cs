@@ -37,7 +37,7 @@ app.MapPostApiChat(async (chatRequest, chatCompletionService, httpContext, kerne
 
     var promptExecutionSettings = new OpenAIPromptExecutionSettings
     {
-        ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions
+        FunctionChoiceBehavior = FunctionChoiceBehavior.Auto()
     };
 
     await chatCompletionService.GetStreamingChatMessageContentsAsync(chatHistory, promptExecutionSettings, kernel)
