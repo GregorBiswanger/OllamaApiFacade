@@ -32,6 +32,8 @@ public static class ChatEndpointExtensions
                 return;
             }
 
+            context.SetChatRequest(chatRequest);
+
             var chatCompletion = context.RequestServices.GetRequiredService<IChatCompletionService>();
             var kernel = context.RequestServices.GetRequiredService<Kernel>();
 

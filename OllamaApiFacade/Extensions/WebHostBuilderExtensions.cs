@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace OllamaApiFacade.Extensions;
 
@@ -20,6 +21,8 @@ public static class WebHostBuilderExtensions
     public static WebApplicationBuilder ConfigureAsLocalOllamaApi(this WebApplicationBuilder builder)
     {
         builder.WebHost.UseUrls("http://localhost:11434");
+
+        builder.Services.AddHttpContextAccessor();
 
         return builder;
     }
