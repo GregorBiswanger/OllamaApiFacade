@@ -3,7 +3,7 @@ using Azure.Security.KeyVault.Secrets;
 
 namespace OllamaApiFacade.DemoWebApi;
 
-public class KeyVaultHelper(string keyVaultUrl)
+public class AzureKeyVaultHelper(string keyVaultUrl)
 {
     private readonly SecretClient _secretClient = new(new Uri(keyVaultUrl), new DefaultAzureCredential());
 
