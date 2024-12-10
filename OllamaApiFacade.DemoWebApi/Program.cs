@@ -26,7 +26,7 @@ builder.ConfigureAsLocalOllamaApi();
 //builder.Services.AddKernel().AddOpenAIChatCompletion("gpt-4o", openAiApiKey)
 //    .Plugins.AddFromType<TimeInformationPlugin>();
 
-builder.Services.AddKernel().AddLmStudio()
+builder.Services.AddKernel().AddAiToolkitVsCode(model: "Phi-3-mini-128k-cpu-int4-rtn-block-32-acc-level-4-onnx")
     .Plugins.AddFromType<TimeInformationPlugin>();
 
 var app = builder.Build();
