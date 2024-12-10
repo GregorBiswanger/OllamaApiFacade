@@ -1,6 +1,6 @@
 # OllamaApiFacade 🚀
 
-**OllamaApiFacade** is an open-source library that allows you to run your own .NET backend as an Ollama API, based on the **Microsoft Semantic Kernel**. This lets clients expecting an Ollama backend interact with your .NET backend. For example, you can use **[Open WebUI](https://openwebui.com)** with your own backend. The library also supports Semantic Kernel Connectors for local LLM/SLM services like **LM Studio**, **AI Toolkit for Visual Studio Code** and is easily extendable to add more interfaces.
+**OllamaApiFacade** is an open-source library that allows you to run your own .NET backend as an Ollama API, based on the **Microsoft Semantic Kernel**. This lets clients expecting an Ollama backend interact with your .NET backend. For example, you can use **[Open WebUI](https://openwebui.com)** with your own backend. The library also supports Semantic Kernel Connectors for local LLM/SLM services like [**LM Studio**](https://lmstudio.ai/), [**AI Toolkit for Visual Studio Code**](https://marketplace.visualstudio.com/items?itemName=ms-windows-ai-studio.windows-ai-studio) and is easily extendable to add more interfaces.
 
 ![OllamaApiFacade Demo](./OllamaApiFacade/Assets/demo.gif)
 
