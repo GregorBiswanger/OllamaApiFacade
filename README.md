@@ -1,6 +1,6 @@
 # OllamaApiFacade 🚀
 
-**OllamaApiFacade** is an open-source library that allows you to run your own .NET backend as an Ollama API, based on the **Microsoft Semantic Kernel**. This lets clients expecting an Ollama backend interact with your .NET backend. For example, you can use **[Open WebUI](https://openwebui.com)** with your own backend. The library also supports local LLM/SLM services like **LmStudio** and is easily extendable to add more interfaces.
+**OllamaApiFacade** is an open-source library that allows you to run your own .NET backend as an Ollama API, based on the **Microsoft Semantic Kernel**. This lets clients expecting an Ollama backend interact with your .NET backend. For example, you can use **[Open WebUI](https://openwebui.com)** with your own backend. The library also supports Semantic Kernel Connectors for local LLM/SLM services like **LM Studio**, **AI Toolkit for Visual Studio Code** and is easily extendable to add more interfaces.
 
 ![OllamaApiFacade Demo](./OllamaApiFacade/Assets/demo.gif)
 
@@ -28,7 +28,7 @@ dotnet add package OllamaApiFacade
 
 ### Simple Hello World Example 🌍
 
-The following example demonstrates how to use the **OllamaApiFacade** with **Microsoft Semantic Kernel** and a local LLM/SLM service like **LmStudio**.
+The following example demonstrates how to use the **OllamaApiFacade** with **Microsoft Semantic Kernel** and a local LLM/SLM service like **LM Studio**.
 
 ```csharp
 using Microsoft.SemanticKernel;
@@ -42,7 +42,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.ConfigureAsLocalOllamaApi();
 
 builder.Services.AddKernel()
-    .AddLmStudio() // Adds LmStudio as the local LLM/SLM service
+    .AddLmStudio() // Adds LM Studio as the local LLM/SLM service
     .Plugins.AddFromType<TimeInformationPlugin>(); // Adds custom Semantic Kernel plugin
 
 var app = builder.Build();
@@ -54,7 +54,7 @@ app.MapPostApiChat(async (chatRequest, chatCompletionService, httpContext, kerne
 
     var promptExecutionSettings = new OpenAIPromptExecutionSettings
     {
-        ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions
+        FunctionChoiceBehavior = FunctionChoiceBehavior.Auto()
     };
 
     await chatCompletionService.GetStreamingChatMessageContentsAsync(chatHistory, promptExecutionSettings, kernel)
