@@ -64,4 +64,30 @@ public static class KernelBuilderExtensions
 
         return builder;
     }
+
+    /// <summary>
+    /// Adds support for connecting to the "AI Toolkit for Visual Studio Code" extension, which provides access to loaded models, to the <see cref="IKernelBuilder"/>.
+    /// </summary>
+    /// <param name="builder">The <see cref="IKernelBuilder"/> to configure.</param>
+    /// <param name="model">The name of the model to use. Model name is visible when you hover over a locally loaded model. Name appears in the info tag and is case Sensitive.</param>
+    /// <param name="endpoint">The endpoint URL of the AI Toolkit for Visual Studio Code. Defaults to "http://localhost:5272/v1/".</param>
+    /// <returns>The configured <see cref="IKernelBuilder"/>.</returns>
+    /// <remarks>
+    /// This method sets up a connection to the specified AI Toolkit for Visual Studio Code endpoint and configures the kernel builder to use OpenAI chat completion with the provided model.
+    /// The AI Toolkit for Visual Studio Code extension can be found at <see href="https://marketplace.visualstudio.com/items?itemName=ms-windows-ai-studio.windows-ai-studio"/>.
+    /// </remarks>
+    public static IKernelBuilder AddAiToolkitVsCode(this IKernelBuilder builder, string model, string endpoint = "http://localhost:5272/v1/")
+    {
+        _endpoint = endpoint;
+
+        var uri = new Uri(endpoint);
+        var openAiClientOptions = new OpenAIClientOptions { Endpoint = uri };
+        var apiKeyCredential = new ApiKeyCredential("none");
+        var openAiClient = new OpenAIClient(apiKeyCredential, openAiClientOptions);
+
+        builder.Services.AddSingleton(openAiClient);
+        builder.AddOpenAIChatCompletion(model, openAiClient);
+
+        return builder;
+    }
 }
