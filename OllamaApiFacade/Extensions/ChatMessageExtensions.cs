@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using Microsoft.AspNetCore.Http;
 using Microsoft.SemanticKernel;
+using Microsoft.SemanticKernel.ChatCompletion;
 using OllamaApiFacade.DTOs;
 
 namespace OllamaApiFacade.Extensions;
@@ -120,5 +121,26 @@ public static class ChatMessageExtensions
         bool hasContent = !string.IsNullOrEmpty(chatResponse.Message.Content);
         bool isNotDone = chatResponse.Done == false;
         return hasContent && isNotDone;
+    }
+
+    /// <summary>
+    /// Changes the system prompt in the chat history.
+    /// </summary>
+    /// <param name="chatHistory">The <see cref="ChatHistory"/> to update with the new system prompt.</param>
+    /// <param name="systemPrompt">The new system prompt to set.</param>
+    /// <remarks>
+    /// If the chat history is empty, this method adds a new system message with the provided prompt.
+    /// Otherwise, it updates the first message in the chat history to the new system prompt.
+    /// </remarks>
+    public static void ChangeSystemPrompt(this ChatHistory chatHistory, string systemPrompt)
+    {
+        if (chatHistory.Count == 0)
+        {
+            chatHistory.AddSystemMessage(systemPrompt);
+        }
+        else
+        {
+            chatHistory[0] = new ChatMessageContent(AuthorRole.System, systemPrompt);
+        }
     }
 }
