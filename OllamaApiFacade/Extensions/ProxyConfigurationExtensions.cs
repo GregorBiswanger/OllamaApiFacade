@@ -23,6 +23,9 @@ public static class ProxyConfigurationExtensions
     /// </returns>
     public static IServiceCollection AddProxyForDebug(this IServiceCollection services, string proxyUrl = "http://127.0.0.1:8080")
     {
+        Environment.SetEnvironmentVariable("HTTP_PROXY", proxyUrl);
+        Environment.SetEnvironmentVariable("HTTPS_PROXY", proxyUrl);
+
         var proxy = new WebProxy(proxyUrl)
         {
             BypassProxyOnLocal = false
@@ -60,6 +63,9 @@ public static class ProxyConfigurationExtensions
     /// </remarks>
     public static IHttpClientBuilder AddProxyForDebug(this IHttpClientBuilder builder, string proxyUrl = "http://127.0.0.1:8080")
     {
+        Environment.SetEnvironmentVariable("HTTP_PROXY", proxyUrl);
+        Environment.SetEnvironmentVariable("HTTPS_PROXY", proxyUrl);
+
         return builder.ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
         {
             Proxy = new WebProxy(proxyUrl)
