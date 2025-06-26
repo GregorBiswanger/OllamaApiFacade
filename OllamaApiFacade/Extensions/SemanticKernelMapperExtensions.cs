@@ -37,6 +37,14 @@ public static class SemanticKernelMapperExtensions
             {
                 chatHistory.AddAssistantMessage(message.Content ?? string.Empty);
             }
+            else if (message.Role == AuthorRole.System.ToString())
+            {
+                chatHistory.AddSystemMessage(message.Content ?? string.Empty);
+            }
+            else if (message.Role == AuthorRole.Developer.ToString())
+            {
+                chatHistory.AddDeveloperMessage(message.Content ?? string.Empty);
+            }
         }
 
         return chatHistory;
