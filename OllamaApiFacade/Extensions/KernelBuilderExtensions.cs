@@ -1,10 +1,11 @@
-﻿using System.ClientModel;
-using System.Diagnostics.CodeAnalysis;
+﻿using Microsoft.Extensions.AI;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Embeddings;
 using OllamaApiFacade.Services;
 using OpenAI;
+using System.ClientModel;
+using System.Diagnostics.CodeAnalysis;
 
 namespace OllamaApiFacade.Extensions;
 
@@ -38,6 +39,29 @@ public static class KernelBuilderExtensions
     }
 
     /// <summary>
+    /// Adds the <see cref="IEmbeddingGenerator{TInput, TEmbedding}"/> to the <see cref="IServiceCollection"/> for generating embeddings using LM-Studio.
+    /// </summary>
+    /// <param name="builder">The <see cref="IKernelBuilder"/> instance to augment.</param>
+    /// <param name="modelId">The name of the Embedding-Model to use for embedding generation. Defaults to "lm-studio".</param>
+    /// <param name="endpoint">The endpoint URL of the LM-Studio service. Defaults to "http://localhost:1234/v1/".</param>
+    /// <returns>The same instance as <paramref name="builder"/>.</returns>
+    /// <remarks>
+    /// This method registers the LM-Studio embedding generator, enabling embedding generation via the specified model and endpoint.
+    /// </remarks>
+    [Experimental("SKEXP0010")]
+    public static IKernelBuilder AddLmStudioEmbeddingGenerator(this IKernelBuilder kernelBuilder, string modelId = "lm-studio", string endpoint = "http://localhost:1234/v1/")
+    {
+        if (_endpoint != endpoint)
+        {
+            _endpoint = endpoint;
+        }
+
+        kernelBuilder.Services.AddLmStudioEmbeddingGenerator(modelId, _endpoint);
+
+        return kernelBuilder;
+    }
+
+    /// <summary>
     /// Adds the <see cref="OpenAITextEmbeddingGenerationService"/> to the <see cref="IKernelBuilder.Services"/> for working with LM-Studio embeddings.
     /// </summary>
     /// <param name="builder">The <see cref="IKernelBuilder"/> instance to augment.</param>
@@ -48,6 +72,7 @@ public static class KernelBuilderExtensions
     /// This method configures the kernel builder to use the specified LM-Studio model for text embedding generation, utilizing the provided OpenAI client and optional service ID and dimensions.
     /// </remarks>
     [Experimental("SKEXP0010")]
+    [Obsolete("Use AddLmStudioEmbeddingGenerator extension methods instead.")]
     public static IKernelBuilder AddLmStudioTextEmbeddingGeneration(this IKernelBuilder builder,
         string modelId = "lm-studio",
         OpenAIClient? openAIClient = null)

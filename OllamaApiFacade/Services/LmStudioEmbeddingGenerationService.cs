@@ -9,6 +9,7 @@ namespace OllamaApiFacade.Services;
 /// Service for generating text embeddings using LM Studio.
 /// </summary>
 [Experimental("SKEXP0001")]
+[Obsolete("Use AddLmStudioEmbeddingGenerator extension methods instead.")]
 public class LmStudioEmbeddingGenerationService : ITextEmbeddingGenerationService
 {
     private readonly HttpClient _httpClient;

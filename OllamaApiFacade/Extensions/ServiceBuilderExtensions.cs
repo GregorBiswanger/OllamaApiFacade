@@ -1,10 +1,11 @@
-﻿using System.ClientModel;
-using System.Diagnostics.CodeAnalysis;
+﻿using Microsoft.Extensions.AI;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Embeddings;
 using OllamaApiFacade.Services;
 using OpenAI;
+using System.ClientModel;
+using System.Diagnostics.CodeAnalysis;
 
 namespace OllamaApiFacade.Extensions;
 
@@ -38,6 +39,35 @@ public static class ServiceBuilderExtensions
     }
 
     /// <summary>
+    /// Adds the <see cref="IEmbeddingGenerator{TInput, TEmbedding}"/> to the <see cref="IServiceCollection"/> for generating embeddings using LM-Studio.
+    /// </summary>
+    /// <param name="services">The <see cref="IServiceCollection"/> to configure.</param>
+    /// <param name="modelId">The name of the Embedding-Model to use for embedding generation. Defaults to "lm-studio".</param>
+    /// <param name="endpoint">The endpoint URL of the LM-Studio service. Defaults to "http://localhost:1234/v1/".</param>
+    /// <returns>The configured <see cref="IServiceCollection"/>.</returns>
+    /// <remarks>
+    /// This method registers the LM Studio embedding generator, enabling embedding generation via the specified model and endpoint.
+    /// </remarks>
+    [Experimental("SKEXP0010")]
+    public static IServiceCollection AddLmStudioEmbeddingGenerator(this IServiceCollection services, string modelId = "lm-studio", string endpoint = "http://localhost:1234/v1/")
+    {
+        if (_endpoint != endpoint)
+        {
+            _endpoint = endpoint;
+        }
+
+        services.AddHttpClient("LmStudio", c => c.BaseAddress = new Uri(_endpoint));
+
+        services.AddSingleton<IEmbeddingGenerator<string, Embedding<float>>>(sp =>
+        {
+            var http = sp.GetRequiredService<IHttpClientFactory>().CreateClient("LmStudio");
+            return new LmStudioEmbeddingGenerator(http, modelId);
+        });
+
+        return services;
+    }
+
+    /// <summary>
     /// Registers the <see cref="LmStudioEmbeddingGenerationService"/> for working with LM-Studio embeddings.
     /// </summary>
     /// <param name="services">The <see cref="IServiceCollection"/> to configure.</param>
@@ -48,6 +78,7 @@ public static class ServiceBuilderExtensions
     /// This method sets up text embedding generation using the specified LM-Studio model and the provided OpenAI client.
     /// </remarks>
     [Experimental("SKEXP0010")]
+    [Obsolete("Use AddLmStudioEmbeddingGenerator extension methods instead.")]
     public static IServiceCollection AddLmStudioTextEmbeddingGeneration(this IServiceCollection services,
         string modelId = "lm-studio",
         OpenAIClient? openAIClient = null)
