@@ -5,7 +5,10 @@ namespace OllamaApiFacade.DemoWebApi;
 
 public class AzureKeyVaultHelper(string keyVaultUrl)
 {
-    private readonly SecretClient _secretClient = new(new Uri(keyVaultUrl), new DefaultAzureCredential());
+    private readonly SecretClient _secretClient = new(new Uri(keyVaultUrl), new DefaultAzureCredential(new DefaultAzureCredentialOptions
+    {
+        AdditionallyAllowedTenants = { "*" }
+    }));
 
     public async Task<string> GetSecretAsync(string secretName)
     {
