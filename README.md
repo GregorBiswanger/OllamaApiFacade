@@ -159,25 +159,134 @@ This method simplifies the process of returning streamed responses, making the i
 
 ### Debugging HTTP Communication with `AddProxyForDebug` 🐞
 
-To inspect what data is being sent and received via HTTP to the language model APIs, you can use the `AddProxyForDebug` method. This is particularly useful for debugging with tools like **Burp Suite Community Edition** or **OWASP ZAP**.
+To inspect HTTP traffic between your application and language model APIs, you can use the `AddProxyForDebug` extension method. This is particularly useful for debugging with tools like **Burp Suite Community Edition** or **OWASP ZAP**.
 
-#### How to Use
-1. Add `AddProxyForDebug` to your service configuration:
-   ```csharp
-   builder.Services.AddProxyForDebug();
-   ```
-2. Start a local debugging tool such as Burp Suite Community Edition.
+#### Basic Usage
 
-By default, the proxy listens on port `8080`. If **Open WebUI** or another service is already running on this port, update the port in Burp Suite or your chosen proxy tool and pass the new proxy URL to `AddProxyForDebug`:
-   ```csharp
-   builder.Services.AddProxyForDebug("http://127.0.0.1:8888");
-   ```
+The simplest way to enable proxy debugging is:
+
+```csharp
+builder.Services.AddProxyForDebug();
+```
+
+**Default behavior:**
+
+- Routes all HTTP/HTTPS traffic through `http://127.0.0.1:8080`
+- **Automatically excludes port 6334** (commonly used by vector databases like Qdrant)
+- **Automatically detects and excludes gRPC traffic** (ports 5001, 5051, 50051, 9090)
+- **Bypasses SSL certificate validation** (required for Burp Suite interception)
+
+#### Advanced Configuration
+
+##### Custom Proxy URL and Excluded Ports
+
+```csharp
+// Use a different proxy port and exclude additional ports
+builder.Services.AddProxyForDebug(
+    proxyUrl: "http://127.0.0.1:8888",
+    excludedPorts: new[] { 6334, 5001, 5051 }
+);
+```
+
+##### Full Configuration Options
+
+For complete control, use the configuration action:
+
+```csharp
+builder.Services.AddProxyForDebug(options => 
+{
+    // Proxy URL (default: http://127.0.0.1:8080)
+    options.ProxyUrl = "http://192.168.1.100:8080";
+    
+    // Exclude specific ports from proxy (default: 6334)
+    options.ExcludedPorts = new[] { 6334, 5001, 5051, 443 };
+    
+    // Exclude specific hosts from proxy
+    options.ExcludedHosts = new[] { "localhost", "grpc-backend.internal" };
+    
+    // Auto-detect and exclude gRPC traffic (default: true)
+    options.AutoExcludeGrpc = true;
+    
+    // Ignore SSL certificate errors for Burp Suite (default: true)
+    options.IgnoreSslErrors = true;
+    
+    // Set environment proxy variables (default: true)
+    options.SetEnvironmentProxyVariables = true;
+});
+```
+
+#### Configuration for Specific HttpClients
+
+You can also apply proxy settings to individual `HttpClient` instances:
+
+```csharp
+builder.Services
+    .AddHttpClient<MyApiService>()
+    .AddProxyForDebug(
+        proxyUrl: "http://127.0.0.1:8080",
+        excludedPorts: new[] { 6334 }
+    );
+```
+
+#### Smart gRPC Detection
+
+The proxy automatically detects and bypasses gRPC traffic based on:
+
+- **Common gRPC ports**: 5001, 5051, 50051, 9090
+- **Host patterns**: Hosts containing "grpc" (e.g., `grpc.service.local`)
+- **URL patterns**: Paths starting with `/grpc.` or containing `.proto`
+
+This ensures that gRPC communication (which doesn't work well through HTTP proxies) is automatically excluded while REST API calls are routed through your debugging proxy.
+
+#### Use Cases
+
+##### Scenario 1: Debug REST API while using Qdrant vector database
+
+```csharp
+// Port 6334 (Qdrant) is automatically excluded
+builder.Services.AddProxyForDebug();
+```
+
+##### Scenario 2: Debug with gRPC backend services
+
+```csharp
+// gRPC traffic automatically bypasses the proxy
+builder.Services.AddProxyForDebug(options => 
+{
+    options.ExcludedPorts = new[] { 6334, 5001 }; // Qdrant + custom gRPC
+});
+```
+
+##### Scenario 3: Burp Suite on non-standard port
+
+```csharp
+builder.Services.AddProxyForDebug("http://127.0.0.1:8888");
+```
 
 #### Important Notes
-- Make sure the proxy and your backend are not conflicting on the same port.
-- This method is intended for development and debugging only. Avoid using it in production as it bypasses SSL validation.
 
-Using this setup, you can see all HTTP requests and responses exchanged with the language model APIs, making it easier to debug and analyze the communication.
+⚠️ **Development Only**: This feature is intended for development and debugging purposes only. It bypasses SSL certificate validation to enable Burp Suite interception.
+
+⚠️ **Port Conflicts**: Ensure your debugging proxy (e.g., Burp Suite) and backend services don't conflict on the same ports.
+
+⚠️ **Production Safety**: Never use `AddProxyForDebug` in production environments. Consider wrapping it in conditional compilation:
+
+```csharp
+#if DEBUG
+builder.Services.AddProxyForDebug();
+#endif
+```
+
+#### Setting Up Burp Suite
+
+1. **Download** [Burp Suite Community Edition](https://portswigger.net/burp/communitydownload)
+2. **Configure Proxy Listener**: Go to Proxy → Options → Proxy Listeners
+   - Default: `127.0.0.1:8080`
+   - If port 8080 is occupied, use a different port (e.g., 8888)
+3. **Start Interception**: Go to Proxy → Intercept → Enable/Disable interception
+4. **View HTTP History**: Go to Proxy → HTTP History to see all requests and responses
+
+Using this setup, you can inspect all HTTP/HTTPS communication between your application and language model APIs, making debugging significantly easier.
 
 ## Contributions 🤝
 
@@ -196,7 +305,7 @@ This project is licensed under the **MIT License**.
 
 MIT License
 
-Copyright (c) 2024 Gregor Biswanger - Microsoft MVP for Azure AI and Web App Development
+Copyright (c) 2024 - 2026 Gregor Biswanger - Microsoft MVP for Azure AI and Web App Development
 
 ## Acknowledgments 🙏
 
