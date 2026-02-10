@@ -77,7 +77,7 @@ public class LmStudioEmbeddingGenerationService : ITextEmbeddingGenerationServic
     /// <summary>
     /// Gets the attributes associated with the embedding generation service.
     /// </summary>
-    public IReadOnlyDictionary<string, object?> Attributes { get; }
+    public IReadOnlyDictionary<string, object?> Attributes { get; } = new Dictionary<string, object?>();
 }
 
 /// <summary>
@@ -88,7 +88,7 @@ public class LmStudioEmbeddingResponse
     /// <summary>
     /// Gets or sets the list of embedding data.
     /// </summary>
-    public List<EmbeddingData> Data { get; set; }
+    public List<EmbeddingData>? Data { get; set; }
 }
 
 /// <summary>
@@ -99,5 +99,5 @@ public class EmbeddingData
     /// <summary>
     /// Gets or sets the embedding vector.
     /// </summary>
-    public List<float> Embedding { get; set; }
+    public List<float>? Embedding { get; set; }
 }
